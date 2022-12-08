@@ -1,0 +1,16 @@
+{
+  "header" : {
+    "error_code" : "",
+    "error_text" : "",
+    "info_text" : "",
+    "is_cryption" : false,
+    "login_session_id" : "",
+    "message_version" : "",
+    "result" : true,
+    "trcode" : "RES1000S1"
+  },
+  "body" : {
+    "reserveRoom" : "대회의실",
+    "Date" : "2022-11-08"
+  }
+}

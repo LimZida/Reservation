@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties>
+		<property name="DATABASE" value="ORACLE" />
+	</properties>
+	<typeAliases>
+		<typeAlias type="com.mcnc.bizmob.db.type.DBMap" alias="DefaultMap" />
+		<typeAlias type="com.mcnc.bizmob.portal.auth.model.Env" alias="Env" />
+		<typeAlias type="com.mcnc.bizmob.portal.auth.model.PropValue" alias="PropValue" />
+		<typeAlias type="com.mcnc.bizmob.portal.auth.model.SmartUpdaterVersion" alias="SmartUpdaterVersion" />
+		<typeAlias type="com.mcnc.bizmob.portal.auth.model.UserInfo" alias="UserInfo" />
+		<typeAlias type="com.mcnc.bizmob.portal.auth.model.DeviceInfo" alias="DeviceInfo" />
+
+		<typeAlias type="java.lang.Integer" alias="Integer" />
+		<typeAlias type="java.lang.String" alias="String" />
+
+	</typeAliases>
+	<typeHandlers>
+		<typeHandler javaType="boolean" jdbcType="CHAR" handler="com.mcnc.bizmob.common.mybatis.handler.BooleanCharTypeHandler" />
+		<typeHandler javaType="boolean" jdbcType="VARCHAR" handler="com.mcnc.bizmob.common.mybatis.handler.BooleanCharTypeHandler" />
+	</typeHandlers>
+
+	<environments default="BizMOBDB">
+		<environment id="BizMOBDB">
+			<transactionManager type="JDBC" /> 
+			<dataSource type="JNDI">
+				<property name="initial_context" value="${initial_context}" />
+				<property name="data_source" value="bizMOBDS" />
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>		
+		<mapper url="file:///${bizmobCoreHome}/sql/${DATABASE}/Application.xml" />
+		<mapper url="file:///${bizmobCoreHome}/sql/${DATABASE}/ServerLicense.xml" />
+		<mapper url="file:///${bizmobCoreHome}/sql/${DATABASE}/Device.xml" />
+		<mapper url="file:///${bizmobCoreHome}/sql/${DATABASE}/User.xml" />
+		<mapper url="file:///${bizmobCoreHome}/sql/${DATABASE}/Env.xml" />
+		<mapper url="file:///${bizmobCoreHome}/sql/${DATABASE}/PropValue.xml" />
+		<mapper url="file:///${bizmobCoreHome}/sql/${DATABASE}/Notice.xml" />
+		<mapper url="file:///${bizmobCoreHome}/sql/${DATABASE}/VerificationApp.xml" />
+
+	</mappers>
+</configuration>

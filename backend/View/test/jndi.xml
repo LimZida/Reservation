@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+<!-- sample jndi configuration -->
+
+ 	<bean id="jndi" class="org.apache.xbean.spring.jndi.DefaultContext">
+		<property name="entries">
+			<map>
+				<entry key="bizMOBDS">
+				<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+					<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+				<!--  해당 IP로 접속 -->
+					<property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
+					<property name="username" value="/////" />
+					<property name="password" value="////" />
+				</bean>
+				</entry>
+<!-- 				<entry key="LegacyDS">
+				<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+					<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+					<property name="url" value="jdbc:oracle:thin:@218.55.79.52:1521:bizmob" />
+					<property name="username" value="edu_bizmob" />
+					<property name="password" value="mcnc1234" />
+				</bean>
+				</entry> -->
+			</map>
+		</property>
+	</bean>
+</beans>

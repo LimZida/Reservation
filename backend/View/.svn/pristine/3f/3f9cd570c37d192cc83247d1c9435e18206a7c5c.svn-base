@@ -1,0 +1,16 @@
+{
+  "header" : {
+    "error_code" : "",
+    "error_text" : "",
+    "info_text" : "",
+    "is_cryption" : false,
+    "login_session_id" : "",
+    "message_version" : "",
+    "result" : true,
+    "trcode" : "RES1330S1"
+  },
+  "body" : {
+	"userSeqPK" : 69,
+	"reserveSeqPK" : 7
+  }
+}

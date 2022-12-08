@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!--
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 RES1100S1.INSERT_RESERVE_INFO
+		  설명:예약 테이블에 요청받은 예약 정보 INSERT
+
+		  요청:attendUserSeqList
+		  	  reserveDate
+		  	  reserveEnd
+		  	  reserveEndCheck
+		  	  reserveName
+		  	  reserveRoom
+		  	  reserveStart
+		  	  userSeqPK
+
+		  응답:
+		     Flag(T/F)
+		     reserveSeqPK
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 RES1100S1.UPDATE_RESERVE_INFO
+		  설명:예약 테이블의 TOPIC 정보 UPDATE
+
+		  요청:reserveTopic
+			  reserveSeqPK
+		  응답:
+		     reserveTopic
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		  RES1100S1.SELECT_RESERVE_INFO
+		  설명:특정 예약에 해당하는 예약 일련번호 SELECT
+
+		  요청:userSeqPK
+		  	  reserveEnd
+		  	  reserveName
+		  	  reserveRoom
+		  	  reserveStart
+
+		  응답:
+			  reserveSeqPK
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		  RES1100S1.INSERT_ATTEND_INFO
+		  설명:특정 예약에 해당하는 참석자의 정보를 참석자 테이블에 INSERT
+
+		  요청: reserveSeqPK
+		       userSeqPK
+
+		  응답: reserveSeqFk
+		       attendUserSeq
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	 -->
+<mapper namespace="RES1100S1">
+	<insert id="INSERT_RESERVE_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			INSERT INTO BIZMEET."RESERVE"(
+				"reserveSeqPK",
+				"reserveRoom",
+				"reserveName",
+				"reserveDate",
+				"reserveStart",
+				"reserveEnd",
+				"reserveRegDate",
+				"userSeqFK"
+			)
+			VALUES
+				(
+				BIZMEET.RESERVESEQ.NEXTVAL,
+				#{reserveRoom},
+				#{reserveName},
+				#{reserveDate},
+				#{reserveStart},
+				#{reserveEnd},
+				SYSDATE,
+				#{userSeqPK}
+				)
+		]]>
+	 </insert>
+
+	 <select id="SELECT_RESERVE_INFO" statementType="PREPARED" parameterType="DefaultMap"
+	 resultType="model.RES1100S1.RES1100S1Response_Body">
+		<![CDATA[
+			SELECT
+				"reserveSeqPK"
+			FROM
+			    BIZMEET."RESERVE"
+			WHERE
+				"reserveName"=#{reserveName, jdbcType=VARCHAR}
+				AND "reserveStart"=#{reserveStart, jdbcType=VARCHAR}
+				AND "reserveEnd"=#{reserveEnd, jdbcType=VARCHAR}
+				AND "reserveDate"=#{reserveDate, jdbcType=VARCHAR}
+				AND "userSeqFK"=#{userSeqPK}
+				AND "reserveRegDate"=SYSDATE
+		]]>
+	 </select>
+
+	<insert id="INSERT_ATTEND_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			INSERT INTO BIZMEET."ATTEND"(
+				"reserveSeqFK",
+				"attendUserSeq"
+			)
+			VALUES
+				(
+				#{reserveSeqPK},
+				#{attendUserSeq}
+				)
+		]]>
+	 </insert>
+</mapper>

@@ -1,0 +1,86 @@
+package adapter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mcnc.bizmob.adapter.AbstractTemplateAdapter;
+import com.mcnc.bizmob.adapter.DBAdapter;
+import com.mcnc.bizmob.db.type.DBMap;
+import com.mcnc.bizmob.hybrid.adapter.api.Adapter;
+import com.mcnc.bizmob.hybrid.adapter.api.IAdapterJob;
+import com.mcnc.bizmob.hybrid.common.server.JsonAdaptorObject;
+
+import model.EML1001S1.EML1001S1Request;
+import model.EML1001S1.EML1001S1Request_Body;
+import model.EML1001S1.EML1001S1Response;
+import model.EML1001S1.EML1001S1Response_Body;
+import model.header.DMHeader;
+//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+//회원이 인증번호 일치여부 요청 시 인증번호가 일치한지 일치하지 않은 지 확인하는 전문입니다.
+//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+@Adapter(trcode = { "EML1001S1" })
+public class EML1001S1_Adapter extends AbstractTemplateAdapter implements IAdapterJob {
+
+	private static final Logger logger = LoggerFactory.getLogger(EML1001S1_Adapter.class);
+	@Autowired
+	private DBAdapter dbAdapter;
+
+	public JsonAdaptorObject onProcess(JsonAdaptorObject obj) {
+//      요청 객체 생성
+		EML1001S1Request request=new EML1001S1Request(obj);
+//		요청 객체의 헤더 및 바디
+		DMHeader header= request.getHeader();
+		EML1001S1Request_Body reqBody=request.getBody();
+		logger.debug("#### EML1001S1 reqBody :{}", reqBody);
+
+
+		try {
+//			요청에서 받은 값(인증번호, 이메일)
+			String trCode=header.getTrcode();
+			String authCode=reqBody.getAuthCode();
+			String inputEmail=reqBody.getInputEmail();
+
+//			DBMap에 요청에서 받은 값 저장
+			DBMap 		reqMap= new DBMap();
+			reqMap.put("authCode", authCode);
+			reqMap.put("inputEmail", inputEmail);
+			System.out.println("요청받은 이메일 "+inputEmail);
+			System.out.println("요청받은 코드 "+authCode);
+			logger.debug("#### EML1001S1 reqMap :{}", reqMap);
+
+//          응답 객체 생성
+			EML1001S1Response response=new EML1001S1Response();
+			EML1001S1Response_Body resBody=new EML1001S1Response_Body();
+
+//			이메일 selectOne으로 받아오기
+			EML1001S1Response_Body userEmailResult = dbAdapter.selectOne("eduDB", trCode + ".SELECT_EMAIL_INFO", reqMap,EML1001S1Response_Body.class);
+//			selectOne 결과가 없을 경우
+//			응답(실패)
+			if(userEmailResult==null) {
+				System.out.println("해당 인증코드를 가진 이메일 결과 없음");
+				logger.error("#### DB:{}","EML1001S1 SelectOne 결과 없음");
+				response.setHeader(header);
+				resBody.setFlag(false);
+				response.setBody(resBody);
+				return makeResponse(obj,response.toJsonNode());
+			}
+//			selectOne 결과가 있을 경우
+//			응답(성공)
+			else {
+				System.out.println("해당 인증코드를 가진 이메일 결과 있음");
+				logger.debug("#### DB:{}","EML1001S1 SelectOne 결과 있음");
+				response.setHeader(header);
+				resBody.setFlag(true);
+				response.setBody(resBody);
+				return makeResponse(obj,response.toJsonNode());
+		    }
+		}
+//		예외처리
+		catch(Exception e){
+//			에러코드 전송
+				return makeFailResponse(header.getTrcode()+" 어댑터에서 로직 처리 중 에러가 발생하였습니다."+ e.getMessage());
+		}
+	}
+
+}

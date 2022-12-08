@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!--
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 MAN1000S1.SELECT_RESERVE_LIST
+		  설명 : 진행 / 예정 / 종료 중인 회의실 예약 내역을 SELECT
+		  응답 :
+		  	userName		(회의실 예약자명)
+		  	reserveDate		(회의실 예약날짜)
+		  	reserveStart	(회의 시작 시간)
+		  	reserveEnd		(회의 종료 시간)
+			reserveName		(회의명)
+			reserveRoom		(회의실명)
+			reserveSeqPK	(회의 일련번호)
+			reserveEndCheck	(회의 종료 여부)
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 MAN1000S1.SELECT_USER_INFO
+		  설명 : 마이페이지에 보여줄 회원 정보를 SELECT
+		  응답 :
+			"userName		(회원 이름)
+			"userEmail		(회원 이메일)
+			"userDep		(회원 부서)
+			"userPosition	(회원 직급)
+			"userPhone		(회원 전화번호)
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	 -->
+
+<mapper namespace="MYP1000S1">
+	<select id="SELECT_RESERVE_LIST" statementType="PREPARED" parameterType="DefaultMap"
+	resultType="model.MYP1000S1.MYP1000S1Response_Body_reserveList">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				(SELECT
+					ROWNUM rn,
+					RESERVE.*
+				FROM
+					(SELECT
+					"userName" AS "reserver",
+						(SELECT
+							COUNT(BIZMEET."ATTEND"."attendUserSeq")
+						FROM
+							BIZMEET."ATTEND"
+						WHERE
+							BIZMEET."RESERVE"."reserveSeqPK" = BIZMEET."ATTEND"."reserveSeqFK")AS "AttendSize",
+						RESERVE.*
+					FROM
+						BIZMEET."RESERVE", BIZMEET."USER"
+					WHERE
+						"userSeqPK" = "userSeqFK"
+						AND "userSeqFK" = #{userSeqPK}
+						ORDER BY "reserveDate" DESC, "reserveStart" DESC)
+					RESERVE, BIZMEET."USER"
+				WHERE
+					"userSeqPK" = "userSeqFK"
+					AND "userSeqFK" = #{userSeqPK}
+					]]>
+					<if test='userIdx==0 and checkResult==1'>
+					<![CDATA[
+							AND (("reserveDate" < TO_CHAR(SYSDATE,'YYYY-MM-DD'))
+							OR ("reserveDate" = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+							AND "reserveEnd" <= TO_CHAR(SYSDATE, 'HH24:MI')))
+					]]>
+					</if>
+					<if test='userIdx==1 and checkResult==1'>
+					<![CDATA[
+							AND "reserveDate" = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+							AND "reserveStart" <= TO_CHAR(SYSDATE, 'HH24:MI')
+							AND "reserveEnd" >= TO_CHAR(SYSDATE, 'HH24:MI')
+					]]>
+					</if>
+					<if test='userIdx==2 and checkResult==1'>
+					<![CDATA[
+							AND (("reserveDate" > TO_CHAR(SYSDATE,'YYYY-MM-DD'))
+							OR ("reserveDate" = TO_CHAR(SYSDATE,'YYYY-MM-DD')
+							AND "reserveStart" >= TO_CHAR(SYSDATE, 'HH24:MI')))
+					]]>
+					</if>
+				)
+	</select>
+
+	<select id="SELECT_USER_INFO" statementType="PREPARED" parameterType="java.util.HashMap"
+	resultType="model.MYP1000S1.MYP1000S1Response_Body">
+		<![CDATA[
+			SELECT
+				"userName",
+				"userEmail",
+				"userPosition",
+				"userDep",
+				"userPhone"
+			FROM
+				BIZMEET."USER"
+			WHERE
+				"userSeqPK" = #{userSeqPK}
+
+		]]>
+	</select>
+</mapper>

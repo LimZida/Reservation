@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!--
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 RES1310S1.UPDATE_EXTENSION
+		  설명 : 회의 종료시간 30분 연장 UPDATE
+		  응답 :
+		  	Flag	(연장 성공 실패 여부)
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	 -->
+
+<mapper namespace="RES1310S1">
+	<update id="UPDATE_EXTENSION" statementType="PREPARED"
+	parameterType="DefaultMap" >
+			<![CDATA[
+		UPDATE BIZMEET."RESERVE"
+			]]>
+		<if test='reserveEnd.equals("23:30")'>
+			<![CDATA[
+			SET	"reserveEnd" = '24:00'
+			]]>
+		</if>
+		<if test='!reserveEnd.equals("23:30")'>
+		<![CDATA[
+			SET	"reserveEnd" = TO_CHAR(TO_DATE(#{reserveEnd}, 'HH24:MI') + INTERVAL '30' MINUTE, 'HH24:MI')
+		]]>
+		</if>
+		<![CDATA[
+		WHERE
+			"reserveSeqPK" = #{reserveSeqPK}
+			AND "userSeqFK" = #{userSeqPK}
+			AND NOT EXISTS (
+				SELECT
+					"reserveStart",
+					"reserveDate",
+					"reserveRoom"
+				FROM BIZMEET."RESERVE"
+				WHERE
+					"reserveStart" = #{reserveEnd}
+					AND "reserveRoom" = #{reserveRoom}
+					AND "reserveDate" = #{reserveDate}
+			)
+		]]>
+	</update>
+</mapper>

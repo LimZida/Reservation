@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!--
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 RES1330S1.DELETE_RESERVATION
+		  설명 : 회의 취소 - 예약된 회의를 취소(삭제)
+		  응답 :
+		  	Flag	(삭제 성공 여부)
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	 -->
+
+<mapper namespace="RES1330S1">
+	<delete id="DELETE_RESERVATION" statementType="PREPARED" parameterType="DefaultMap">
+		<![CDATA[
+			DELETE BIZMEET."RESERVE"
+			WHERE
+				"userSeqFK" = #{userSeqPK}
+				AND "reserveSeqPK" = #{reserveSeqPK}
+		]]>
+	</delete>
+</mapper>

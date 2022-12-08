@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Notice">
+    <resultMap id="NoticeMap" type="com.mcnc.bizmob.hybrid.adapter.model.ZZ0007.ZZ0007Response_Body_list">
+        <result column="NOTICE_ID" property="noticeId"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT_TYPE" property="contentType"/>
+        <result column="APP_OFF_FLAG" property="offFlag" jdbcType="CHAR"/>
+        <result column="SKIP_FLAG" property="skipFlag" jdbcType="CHAR"/>
+        <result column="SKIP_DAY" property="skipDay"/>
+        <result column="CONTENT" property="content"/>
+        <result column="IMAGE_URL" property="imgUrl"/>
+        <result column="IMAGE_UPDATE_DATE" property="imgUpdateDate"/>
+        <result column="IMAGE_TYPE" property="imgType"/>
+    </resultMap>
+   
+   <select id="getNoticeListByAppKey" parameterType="DefaultMap" resultMap="NoticeMap">
+	
+    	SELECT 
+	 		N.NOTICE_ID
+	 		, N.TITLE
+	 		, N.CONTENT_TYPE
+	 		, N.APP_OFF_FLAG
+	 		, N.SKIP_FLAG
+	 		, N.SKIP_DAY
+	 		, N.CONTENT
+	 		, N.IMAGE_URL
+	 		, N.IMAGE_UPDATE_DATE
+	 		, N.IMAGE_TYPE
+		FROM
+			NOTICE N LEFT OUTER JOIN NOTICE_APP NA ON N.NOTICE_ID = NA.NOTICE_ID
+		WHERE
+			N.CEASE_FLAG != 'Y' 
+			AND TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') BETWEEN N.START_DATE AND N.END_DATE
+			AND NA.APP_KEY = #{appKey}
+			<![CDATA[ AND ROWNUM <= 3 ]]>
+			ORDER BY N.CREATE_DATE DESC
+    
+   </select>
+    
+  
+</mapper>

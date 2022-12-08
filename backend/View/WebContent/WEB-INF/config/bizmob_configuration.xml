@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bizMOBConfiguration>
+	<!-- 기본설정 -->
+	<baseConfig>
+		<customHome comment="bizMOB 서버의 커스텀설정 디렉토리 위치로 첫번째 디렉토리가 존재하지 않으면 그 다음 디렉토리를 찾는다.">
+			C:/tq/SMART_HOME
+		</customHome>
+		<!--
+			D:/bizmob/oracle/SMART_HOME
+		-->
+		<isJournalService comment="통계데이터 수집 여부">true</isJournalService>
+		<isEmulatorService comment="웹에뮬레이터 사용여부">true</isEmulatorService>
+		<isReloaderbleMapperService comment="Mybatis 매퍼파일 자동 리로더. 라이선스의 서버배포 타입이 운영일 경우는 Core에서 false로 강제조정함">true</isReloaderbleMapperService>
+	</baseConfig>
+
+	<!-- 인증방법 -->
+	<authConfig comment="인증 모드 및 인증방법 선택">
+		<authMode comment="b2b, b2c">b2b</authMode>
+		<authOrder comment="인증순서 : bizmob, legacy">
+			<first>bizmob</first>
+			<second>legacy</second>
+		</authOrder>
+		<authMethod comment="db, file">file</authMethod>
+	</authConfig>
+
+	<!-- 멀티로그인 세션정책 -->
+	<sessionConfig>
+		<isSessionValidationService>true</isSessionValidationService>
+		<sessionType comment="fixed, flexible">flexible</sessionType>
+		<expireTime comment="해당분동안 아무런 동작이 없을경우 cache메모리에서 삭제되는 시간">30</expireTime>
+		<policy comment="freeUsers : 멀티로그인 허용, onlyFirstUser : 처음 로그인한 사람의 세션을 유지, onlyLastUser : 마지막에 로그인한 사람의 세션을 유지">onlyLastUser</policy>
+		<kickoutServerInfoList>
+			<kickoutServerInfo>
+				<scheme>http</scheme>
+				<host>192.168.0.3</host>
+				<port>8089</port>
+				<path>bizmob</path>
+			</kickoutServerInfo>
+		</kickoutServerInfoList>
+	</sessionConfig>
+
+</bizMOBConfiguration>

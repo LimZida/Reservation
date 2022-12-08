@@ -1,0 +1,20 @@
+{
+  "header" : {
+    "error_code" : "",
+    "error_text" : "",
+    "info_text" : "",
+    "is_cryption" : false,
+    "login_session_id" : "",
+    "message_version" : "",
+    "result" : true,
+    "trcode" : "RES1330S1"
+  },
+  "body" : {
+    "attendUserSeqList" : [79],
+    "trxDate" : "20221117",
+    "trxId" : [463,464],
+    "reserveSeqPK" : 91,
+    "userSeqPK" : 84,
+    "reserveName" : "웅진zzz코웨이"
+  }
+}

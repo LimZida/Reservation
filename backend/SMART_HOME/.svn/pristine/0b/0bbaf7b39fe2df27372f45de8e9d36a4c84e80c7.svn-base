@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<!-- 실무자용 슈퍼계정 설정 -->
+	<entry key="isMandatorService">true</entry>
+	<entry key="delimiter">/</entry>
+	<entry key="mandatorList">regar/test</entry>
+	<entry key="isLogging">true</entry>
+</properties>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+				http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+				http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+	<context:annotation-config />
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
+
+	<context:component-scan base-package="download" />
+	<context:component-scan base-package="web" />
+
+	<!-- Service -->
+	<context:component-scan base-package="com.mcnc.bizmob.hybrid.server.web.service" />
+
+	<!-- Dao -->
+	<context:component-scan base-package="com.mcnc.bizmob.hybrid.server.web.dao">
+	<context:exclude-filter type="regex" expression="com.mcnc.bizmob.hybrid.server.web.dao.BizLogicDao" />
+	</context:component-scan>
+	<context:component-scan base-package="com.mcnc.bizmob.portal.web.service" />
+	<context:component-scan base-package="com.mcnc.bizmob.portal.admin.protocol.web" />
+
+	<!-- 옵션 컨트롤러(이미지변환, 파일업로드 등) -->
+	<!-- Controller -->
+	<context:component-scan base-package="com.mcnc.bizmob.hybrid.server.web.control">
+		<context:exclude-filter type="regex"
+			expression="com.mcnc.bizmob.hybrid.server.web.control.MockController" />
+	</context:component-scan>
+
+	<!-- Aware -->
+	<bean id="messageAwareProcessor" class="com.mcnc.bizmob.hybrid.server.web.service.MessageAwareService" />
+	<bean id="sessionAwareProcessor" class="com.mcnc.bizmob.hybrid.server.web.service.SessionAwareService" />
+
+
+	<mvc:resources mapping="/resources/**" location="/config/" />
+	<mvc:view-controller path="/" view-name="index" />
+	 <bean id="contentNegotiationManager"  class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="favorPathExtension" value="true" />
+        <property name="ignoreAcceptHeader" value="true"/>
+        <property name="useJaf" value="false"/>
+        <property name="defaultContentType" value="text/html" />
+        <property name="mediaTypes">
+            <map>
+               	<entry key="atom" value="application/atom+xml" />
+				<entry key="html" value="text/html" />
+				<entry key="jsp" value="text/html" />
+				<entry key="json" value="application/json" />
+				<entry key="xml" value="text/xml" />
+				<entry key="css" value="text/css" />
+           </map>
+        </property>
+    </bean>
+
+	<bean 	class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager" ref="contentNegotiationManager"/>
+		<property name="viewResolvers">
+			<list>
+				<bean
+					class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+					p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" p:order="1" />
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"
+					p:order="2" />
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Browser cache control -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/contents/**/*" />
+			<bean
+				class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+				<property name="cacheSeconds" value="0" />
+				<property name="useExpiresHeader" value="true" />
+				<property name="useCacheControlHeader" value="true" />
+				<property name="useCacheControlNoStore" value="true" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+</beans>

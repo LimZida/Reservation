@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+        
+    <wb-module deploy-name="bizmob.adapter.3.5.0">
+                
+        <wb-resource deploy-path="/" source-path="/src"/>
+        <dependent-module archiveName="bizmob.model.3.5.0.jar" deploy-path="/" handle="module:/resource/bizmob.model.3.5.0/bizmob.model.3.5.0">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+            
+    </wb-module>
+    
+</project-modules>

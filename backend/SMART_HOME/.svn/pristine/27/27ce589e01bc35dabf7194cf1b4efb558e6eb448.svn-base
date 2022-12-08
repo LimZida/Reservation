@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!--
+		사용 X
+
+	     ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+         EML1000S1.SELECT_EMAIL_INFO
+		  설명:사용자가 인증을 다시 요청할 경우, 해당 이메일이 DB에 존재하는 지 확인하는 쿼리
+
+		  -만약 이메일이 아직 존재하면
+		  인증코드 업데이트(EML1000S1.UPDATE_EMAIL_INFO)
+
+		  -만약 이메일이 존재하지 않으면
+		  테이블에 이메일과 인증코드 저장(EML1000S1.INSERT_EMAIL_INFO)
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 EML1000S1.INSERT_EMAIL_INFO
+		  설명:요청받은 사용자 메일에 인증 메일을 보내고, 테이블에 사용자 메일과 해당 인증코드를 저장
+
+		  응답:
+		  flag(T/F)
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+         EML1000S1.UPDATE_EMAIL_INFO
+		  설명:사용자가 인증코드 만료 전에 인증을 다시 요청할 경우, 새로운 인증번호로 갱신하는 쿼리
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	 -->
+
+<mapper namespace="EML1000S1">
+ 	<select id="SELECT_EMAIL_INFO" statementType="PREPARED" parameterType="DefaultMap"
+	 resultType="model.EML1000S1.EML1000S1Response_Body">
+		<![CDATA[
+			SELECT
+				"authEmail"
+			FROM
+			    BIZMEET."AUTH"
+			WHERE
+				"authEmail" = #{inputEmail, jdbcType=VARCHAR}
+		]]>
+	 </select>
+
+	<delete id="DELETE_EMAIL_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			DELETE
+			FROM
+				BIZMEET."AUTH"
+			WHERE
+				"authEmail" = #{inputEmail, jdbcType=VARCHAR},
+				AND "authCode"=#{authCode, jdbcType=VARCHAR}
+		]]>
+	 </delete>
+
+	<insert id="INSERT_EMAIL_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			INSERT INTO BIZMEET."AUTH"(
+				"authEmail",
+				"authCode",
+				"authDate"
+			)
+			VALUES
+				(
+				#{inputEmail, jdbcType=VARCHAR},
+				#{authCode, jdbcType=VARCHAR},
+				SYSDATE
+				)
+		]]>
+	 </insert>
+
+	 <update id="UPDATE_EMAIL_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			UPDATE
+				BIZMEET."AUTH"
+			SET
+				"authCode"=#{authCode, jdbcType=VARCHAR},
+				"authDate"=SYSDATE
+			WHERE
+				"authEmail"=#{inputEmail, jdbcType=VARCHAR}
+		]]>
+	 </update>
+</mapper>

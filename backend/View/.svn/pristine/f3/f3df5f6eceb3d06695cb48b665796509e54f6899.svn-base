@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment />
+	
+	<entry key="basePath">Download</entry>
+	
+	<entry key="PHONE">PHONE</entry>
+	<entry key="TABLET">TABLET</entry>
+	
+	<entry key="iOS">iOS</entry>
+	<entry key="Android">Android</entry>
+	
+	<entry key="app">app</entry>
+	<entry key="content">appcontents</entry>
+	<entry key="meta">appmeta</entry>
+	
+</properties>

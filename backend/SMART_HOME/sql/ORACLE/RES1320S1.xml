@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!--
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 RES1320S1.UPDATE_TIME_INFO
+		  설명:예약 종료 시 예약 테이블의 종료 시간 정보, 예약 종료 여부  UPDATE
+
+		  요청:userSeqPK
+			  reserveSeqPK
+		  응답:
+		     reserveEnd
+		     reserveEndCheck
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		  RES1320S1.SELECT_TIME_INFO
+		  설명:특정 예약에 해당하는 예약 종료 시간 SELECT
+
+		  요청:userSeqPK
+			  reserveSeqPK
+
+		  응답:
+			  reserveEnd
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	 -->
+<mapper namespace="RES1320S1">
+	<update id="UPDATE_TIME_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			UPDATE
+				BIZMEET."RESERVE"
+			SET
+				"reserveEnd" = #{reserveEnd, jdbcType=VARCHAR},
+				"reserveEndCheck" = 'T'
+			WHERE
+				"reserveSeqPK" = #{reserveSeqPK}
+				AND "userSeqFK" = #{userSeqPK}
+		]]>
+	 </update>
+
+	 <select id="SELECT_TIME_INFO" statementType="PREPARED" parameterType="DefaultMap"
+	 resultType="model.RES1320S1.RES1320S1Response_Body">
+		<![CDATA[
+			SELECT
+				"reserveEnd"
+			FROM
+			    BIZMEET."RESERVE"
+			WHERE
+				"reserveSeqPK" = #{reserveSeqPK}
+				AND "userSeqFK" = #{userSeqPK}
+		]]>
+	 </select>
+</mapper>

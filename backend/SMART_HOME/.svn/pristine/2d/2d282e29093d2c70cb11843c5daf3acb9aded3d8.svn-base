@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!--
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 RES1200S1.UPDATE_RESERVE_INFO
+		  설명:예약 테이블에 요청받은 예약 정보 UPDATE
+
+		  요청:attendUserSeqList
+		  	  reserveDate
+		  	  reserveEnd
+		  	  reserveName
+		  	  reserveRoom
+		  	  reserveStart
+
+		  응답:
+		     Flag(T/F)
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 RES1200S1.DELETE_ATTEND_INFO
+		  설명:reserveSeqPK에 해당하는 참석자 테이블에 있는 정보 삭제
+
+		  요청: reserveSeqPK
+
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 RES1200S1.DELETE_PUSH_INFO
+		  설명:reserveSeqPK에 해당하는 푸시 테이블에 있는 정보 삭제
+
+		  요청: reserveSeqPK
+
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		  RES1200S1.INSERT_ATTEND_INFO
+		  설명:특정 예약에 해당하는 참석자의 정보를 참석자 테이블에 INSERT
+
+		  요청: reserveSeqPK
+		       userSeqPK
+
+		  응답: reserveSeqFk
+		       attendUserSeq
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		  RES1200S1.INSERT_PUSH_INFO
+		  설명:특정 예약에 해당하는 참석자의 푸시 정보를 푸시 테이블에 INSERT
+
+		  요청: 	pushReserveSeqPK
+				pushTrxDate
+				pushTrxId
+
+		  응답: flag
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+     	  RES1200S1.SELECT_RESERVE_TIME_CHECK
+		  설명:예약 시 해당 회의실의 해당 일에 기존 예약이 있는 지 확인후 T/F를 반환
+
+		  요청: reserveRoom
+		  	   reserveDate
+		  	   reserveEnd
+		  	   reserveStart
+
+		  응답: flag
+         ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	 -->
+<mapper namespace="RES1200S1">
+	<update id="UPDATE_RESERVE_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			UPDATE
+				BIZMEET."RESERVE"
+			SET
+				"reserveDate"=#{reserveDate, jdbcType=VARCHAR},
+				"reserveStart"=#{reserveStart, jdbcType=VARCHAR},
+				"reserveEnd"=#{reserveEnd, jdbcType=VARCHAR},
+				"reserveName"=#{reserveName, jdbcType=VARCHAR},
+				"reserveRoom"=#{reserveRoom, jdbcType=VARCHAR}
+			WHERE
+				"reserveSeqPK"=#{reserveSeqPK}
+				AND "userSeqFK"=#{userSeqPK}
+		]]>
+	 </update>
+
+	 <delete id="DELETE_ATTEND_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			DELETE
+			FROM
+				BIZMEET."ATTEND"
+			WHERE
+				"reserveSeqFK"=#{reserveSeqPK}
+		]]>
+	 </delete>
+
+	 <delete id="DELETE_PUSH_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			DELETE
+			FROM
+				BIZMEET."PUSH"
+			WHERE
+				"pushReserveSeqPK"=#{reserveSeqPK}
+		]]>
+	 </delete>
+
+   	<insert id="INSERT_ATTEND_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<foreach collection="attendUserSeqList" item="item" index="index"
+			separator=" " open="INSERT ALL" close="SELECT * FROM DUAL">
+			INTO BIZMEET."ATTEND"(
+				"reserveSeqFK",
+				"attendUserSeq"
+			)
+			VALUES
+				(
+				#{reserveSeqPK},
+				#{item}
+				)
+		</foreach>
+	</insert>
+
+   	<insert id="INSERT_PUSH_INFO" statementType="CALLABLE" parameterType="DefaultMap">
+		<foreach collection="trxIdArr" item="item" index="index"
+			separator=" " open="INSERT ALL" close="SELECT * FROM DUAL">
+			INTO BIZMEET."PUSH"(
+				"pushReserveSeqPK",
+				"pushTrxDate",
+				"pushTrxId"
+			)
+			VALUES
+				(
+				#{reserveSeqPK},
+				#{pushTrxDate, jdbcType=VARCHAR},
+				#{item}
+				)
+		</foreach>
+	</insert>
+
+<!-- 	<select id="SELECT_RESERVE_TIME_CHECK" statementType="PREPARED" parameterType="DefaultMap"
+	 resultType="model.RES1200S1.RES1200S1Response_Body_reserveList">
+		<![CDATA[
+			SELECT
+				"reserveName",
+				"reserveDate",
+				"reserveStart",
+				"reserveEnd"
+			FROM
+			    BIZMEET."RESERVE"
+			WHERE
+				"reserveDate" = #{reserveDate}
+				AND "reserveRoom" = #{reserveRoom}
+				AND
+				(
+					("reserveEnd" > #{reserveStart} AND "reserveStart" < #{reserveEnd})
+					OR ("reserveEnd" = #{reserveStart} AND "reserveStart" = #{reserveEnd})
+				)
+		]]>
+	 </select> -->
+</mapper>

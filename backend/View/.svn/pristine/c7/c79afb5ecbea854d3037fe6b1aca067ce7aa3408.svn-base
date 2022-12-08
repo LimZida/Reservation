@@ -1,0 +1,22 @@
+{
+  "header" : {
+    "error_code" : "",
+    "error_text" : "",
+    "info_text" : "",
+    "is_cryption" : false,
+    "login_session_id" : "",
+    "message_version" : "",
+    "result" : true,
+    "trcode" : "RES1200S1"
+  },
+  "body" : {
+  	"reserveSeqPK":8,
+  	"userSeqPK":68,
+    "reserveRoom" : "중회의실",
+    "reserveDate" : "2022-10-30",
+    "reserveStart" : "12:00",
+    "reserveEnd" : "13:00",
+    "reserveName" : "NBB 햄버거실태조사",
+    "attendUserSeqList" : [20,21,23,24,26]
+  }
+}

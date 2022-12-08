@@ -1,0 +1,22 @@
+{
+  "header" : {
+    "error_code" : "",
+    "error_text" : "",
+    "info_text" : "",
+    "is_cryption" : false,
+    "login_session_id" : "",
+    "message_version" : "",
+    "result" : true,
+    "trcode" : "RES1100S1"
+  },
+  "body" : {
+  	"userSeqPK" :84,
+    "reserveRoom" : "중회의실",
+    "reserveEndCheck" : "0",
+    "reserveDate" : "2022-12-25",
+    "reserveStart" : "12:30",
+    "reserveEnd" : "15:00",
+    "reserveName" : "아ㅓㄴ녕zz",
+    "attendUserSeqList" : []
+  }
+}

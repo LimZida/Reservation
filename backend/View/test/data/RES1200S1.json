@@ -1,0 +1,26 @@
+{
+  "header" : {
+    "error_code" : "",
+    "error_text" : "",
+    "info_text" : "",
+    "is_cryption" : false,
+    "login_session_id" : "",
+    "message_version" : "",
+    "result" : true,
+    "trcode" : "RES1200S1"
+  },
+  "body" : {
+    "userSeqPK" : 84,
+    "pastAttendUserSeqList" : [],
+    "trxDate" : "20221125",
+    "reserveSeqPK" : 133,
+    "trxId" : [1385],
+    "reserveRoom" : "대회의실",
+    "reserveDate" : "2022-11-25",
+    "reserveStart" : "13:00",
+    "reserveEnd" : "14:00",
+    "reserveName" : "후루",
+    "pastReserveName" : "아ㅓ녕zz",
+    "attendUserSeqList" : []
+  }
+}

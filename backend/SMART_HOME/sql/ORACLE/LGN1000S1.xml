@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	<!--
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 LGN1000S1.SELECT_USER
+		  설명: 로그인에 필요한 회원 정보를 SELECT
+		  응답:
+		  Flag			(로그인 성공 여부)
+		  userSeqPK		(회원 일련번호)
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+		 LGN1000S1.INSERT_JWT_TOKEN
+		  설명: 로그인 성공 시 Jwt Token 발행
+		 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	 -->
+<mapper namespace="LGN1000S1">
+	<select id="SELECT_USER" statementType="PREPARED" parameterType="DefaultMap"
+	resultType="model.LGN1000S1.LGN1000S1Response_Body">
+		<![CDATA[
+			SELECT
+				"userSeqPK"
+			FROM
+				BIZMEET."USER"
+			WHERE
+				"userEmail" = #{userEmail}
+		]]>
+
+	</select>
+
+	<update id="UPDATE_JWT_TOKEN" statementType="CALLABLE" parameterType="DefaultMap">
+		<![CDATA[
+			UPDATE
+				BIZMEET."USER"
+			SET
+				"JwtToken" = #{JwtToken},
+				"CreateTokenDate" = SYSDATE
+			WHERE
+				"userEmail" = #{userEmail}
+		]]>
+	</update>
+
+</mapper>

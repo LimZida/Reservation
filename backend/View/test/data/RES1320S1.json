@@ -1,0 +1,21 @@
+{
+  "header" : {
+    "error_code" : "",
+    "error_text" : "",
+    "info_text" : "",
+    "is_cryption" : false,
+    "login_session_id" : "",
+    "message_version" : "",
+    "result" : true,
+    "trcode" : "RES1320S1"
+  },
+  "body" : {
+    "Hour" : "15:57",
+    "attendUserSeqList" : [79,88],
+    "trxDate" : "20221122",
+    "trxId" : [1128,1129],
+    "reserveName" : "후..",
+    "reserveSeqPK":118,
+    "userSeqPK":84
+  }
+}

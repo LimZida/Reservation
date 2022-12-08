@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+                            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+        					http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd		
+                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	<description>실무자용 슈퍼계정 설정</description>
+
+	<context:annotation-config />
+
+	<bean id="mandatorService" class="com.mcnc.bizmob.portal.auth.service.MandatorService">
+		<constructor-arg index="0">
+			<value>file:${bizmobCustHome}/conf/server/mandatorConfig.xml</value>
+		</constructor-arg>
+	</bean>
+</beans>

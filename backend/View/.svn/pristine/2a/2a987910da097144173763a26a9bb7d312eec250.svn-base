@@ -1,0 +1,18 @@
+{
+  "header" : {
+    "error_code" : "",
+    "error_text" : "",
+    "info_text" : "",
+    "is_cryption" : false,
+    "login_session_id" : "",
+    "message_version" : "",
+    "result" : true,
+    "trcode" : "MYP1000S1"
+  },
+  "body" : {
+  	"userSeqPK" :67,
+  	"checkResultArray":[1,1,1],
+  	"endIndex":9,
+  	"startIndex":0
+  }
+}
