@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-
-<properties>
-	<comment />
-	<entry key="PROP_DIR_NAME">properties</entry>
-	<entry key="SERVER_DIR_NAME">server</entry>
-	<entry key="CONFIG_FILE_NAME">bizmob.properties</entry>
-</properties>
